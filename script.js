@@ -1,3 +1,4 @@
+// script.js
 const cities = [
   "Arad",
   "Bucharest",
@@ -113,16 +114,11 @@ function a_star(start, goal) {
 function gbfs(start, goal) {
   let openSet = new Set([start]);
   let cameFrom = {};
-  let fScore = {};
-
-  cities.forEach((city) => {
-    fScore[city] = Infinity;
-  });
-  fScore[start] = heuristic(start);
+  let visited = new Set();
 
   while (openSet.size > 0) {
     let current = Array.from(openSet).reduce((a, b) =>
-      fScore[a] < fScore[b] ? a : b
+      heuristic(a) < heuristic(b) ? a : b
     );
 
     if (current === goal) {
@@ -130,11 +126,11 @@ function gbfs(start, goal) {
     }
 
     openSet.delete(current);
+    visited.add(current);
 
     for (let neighbor in graph[current]) {
-      if (!cameFrom[neighbor]) {
+      if (!visited.has(neighbor)) {
         cameFrom[neighbor] = current;
-        fScore[neighbor] = heuristic(neighbor);
         openSet.add(neighbor);
       }
     }
@@ -148,9 +144,6 @@ function reconstruct_path(cameFrom, current) {
   while (current in cameFrom) {
     current = cameFrom[current];
     total_path.push(current);
-    if (total_path.length > cities.length) {
-      throw new Error("Path reconstruction failed: possible infinite loop");
-    }
   }
   return total_path.reverse();
 }
