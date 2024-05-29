@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>City Path Finder</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>City Path Finder</h1>
+      <label for="start-city">Select Starting City:</label>
+      <select id="start-city">
+        <option value="Arad">Arad</option>
+        <option value="Bucharest">Bucharest</option>
+        <option value="Craiova">Craiova</option>
+        <option value="Dobreta">Dobreta</option>
+        <option value="Eforie">Eforie</option>
+        <option value="Fagaras">Fagaras</option>
+        <option value="Giurgiu">Giurgiu</option>
+        <option value="Hirsova">Hirsova</option>
+        <option value="Iasi">Iasi</option>
+        <option value="Lugoj">Lugoj</option>
+        <option value="Mehadia">Mehadia</option>
+        <option value="Neamt">Neamt</option>
+        <option value="Oradea">Oradea</option>
+        <option value="Pitesti">Pitesti</option>
+        <option value="Rimnicu Vilcea">Rimnicu Vilcea</option>
+        <option value="Sibiu">Sibiu</option>
+        <option value="Timisoara">Timisoara</option>
+        <option value="Urziceni">Urziceni</option>
+        <option value="Vaslui">Vaslui</option>
+        <option value="Zerind">Zerind</option>
+      </select>
+      <label for="algorithm">Select Algorithm:</label>
+      <select id="algorithm">
+        <option value="a_star">A*</option>
+        <option value="gbfs">Greedy Best-First Search</option>
+      </select>
+      <button onclick="findPath()">Find Path</button>
+      <div class="result" id="result"></div>
+    </div>
+  </body>
+</html>
