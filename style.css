@@ -1,6 +1,6 @@
 /* style.css */
 :root {
-  --font-family: "Press Start 2P", cursive;
+  --font-family: cursive;
   --background-color: #121212;
   --container-bg-color: #1e1e1e;
   --text-color: #e0e0e0;
@@ -9,6 +9,7 @@
   --border-radius: 0.5rem;
   --padding: 1rem;
   --margin: 1rem;
+  --transition-duration: 0.3s;
 }
 
 body {
@@ -51,17 +52,23 @@ button {
   border-radius: 0.25rem;
   border: 0.0625rem solid #ccc;
   font-size: 1rem;
+  
 }
 
 button {
   background-color: var(--primary-color);
+  font-family: inherit;
   color: var(--text-color);
   border: none;
   cursor: pointer;
+  transition: background-color var(--transition-duration),
+    transform var(--transition-duration);
+  will-change: transform;
 }
 
 button:hover {
-  background-color: var(--secondary-color);
+  opacity: 0.9;
+  transform: translateY(0.15rem);
 }
 
 .result {
@@ -70,6 +77,12 @@ button:hover {
   border-radius: var(--border-radius);
   margin-top: var(--margin);
   border: 0.0625rem solid #333;
+  opacity: 0;
+  transition: opacity var(--transition-duration);
+}
+
+.result.visible {
+  opacity: 1;
 }
 
 .result h2 {
