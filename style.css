@@ -1,15 +1,30 @@
 /* style.css */
 :root {
   --font-family: cursive;
-  --background-color: #121212;
-  --container-bg-color: #1e1e1e;
-  --text-color: #e0e0e0;
+  --background-color-light: #ffffff;
+  --container-bg-color-light: #f0f0f0;
+  --text-color-light: #333333;
+  --background-color-dark: #121212;
+  --container-bg-color-dark: #1e1e1e;
+  --text-color-dark: #e0e0e0;
   --primary-color: #ff5722;
   --secondary-color: #2196f3;
   --border-radius: 0.5rem;
   --padding: 1rem;
   --margin: 1rem;
   --transition-duration: 0.3s;
+}
+
+body.light-mode {
+  --background-color: var(--background-color-light);
+  --container-bg-color: var(--container-bg-color-light);
+  --text-color: var(--text-color-light);
+}
+
+body.dark-mode {
+  --background-color: var(--background-color-dark);
+  --container-bg-color: var(--container-bg-color-dark);
+  --text-color: var(--text-color-dark);
 }
 
 body {
@@ -52,12 +67,11 @@ button {
   border-radius: 0.25rem;
   border: 0.0625rem solid #ccc;
   font-size: 1rem;
-  
+  font-family: inherit;
 }
 
 button {
   background-color: var(--primary-color);
-  font-family: inherit;
   color: var(--text-color);
   border: none;
   cursor: pointer;
@@ -85,7 +99,20 @@ button:hover {
   opacity: 1;
 }
 
-.result h2 {
-  font-size: 1.25rem;
-  margin-bottom: 0.5rem;
+.switch {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.switch input {
+  display: none;
+}
+
+.switch label {
+  background-color: var(--container-bg-color);
+  border-radius: var(--border-radius);
+  border: 0.0625rem solid #ccc;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
 }
