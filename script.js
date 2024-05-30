@@ -162,6 +162,7 @@ function findPath() {
 
   if (path.length === 0) {
     resultDiv.innerHTML = `<p>No path found</p>`;
+    resultDiv.classList.add("visible");
     return;
   }
 
@@ -177,4 +178,17 @@ function findPath() {
         <p>${path.join(" -> ")}</p>
         <p>Cost: ${cost}</p>
       `;
+  resultDiv.classList.add("visible");
 }
+
+document
+  .getElementById("theme-switch")
+  .addEventListener("change", function (event) {
+    if (event.target.checked) {
+      document.body.classList.remove("light-mode");
+      document.body.classList.add("dark-mode");
+    } else {
+      document.body.classList.remove("dark-mode");
+      document.body.classList.add("light-mode");
+    }
+  });
