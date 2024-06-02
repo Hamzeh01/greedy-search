@@ -1,4 +1,3 @@
-// script.js
 const cities = [
   "Arad",
   "Bucharest",
@@ -184,11 +183,14 @@ function findPath() {
 document
   .getElementById("theme-switch")
   .addEventListener("change", function (event) {
+    const label = document.querySelector('label[for="theme-switch"]');
     if (event.target.checked) {
       document.body.classList.remove("light-mode");
       document.body.classList.add("dark-mode");
+      label.textContent = "Enable Light Mode";
     } else {
       document.body.classList.remove("dark-mode");
       document.body.classList.add("light-mode");
+      label.textContent = "Enable Dark Mode";
     }
   });
