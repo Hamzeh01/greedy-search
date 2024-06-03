@@ -10,7 +10,7 @@ Check out the live demo [here](https://hamzeh01.github.io/greedy-search/).
 
 ## Project Screenshot
 
-![City Path Finder Screenshot](screenshot.png)
+![City Path Finder Screenshot](screen.png)
 
 ## Features
 
