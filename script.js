@@ -44,6 +44,7 @@ const graph = {
   Zerind: { Arad: 75, Oradea: 71 },
 };
 
+// used to estimate the cost to reach the goal from the current node.
 const heuristics = {
   Arad: 366,
   Bucharest: 0,
@@ -72,10 +73,10 @@ function heuristic(city) {
 }
 
 function a_star(start, goal) {
-  let openSet = new Set([start]);
-  let cameFrom = {};
-  let gScore = {};
-  let fScore = {};
+  let openSet = new Set([start]); // initialized with the starting node.
+  let cameFrom = {}; // keeps track of the path.
+  let gScore = {}; // The cost of the path from the start node to the current node.
+  let fScore = {}; // The estimated total cost from the start node to the goal through the current node.
 
   cities.forEach((city) => {
     gScore[city] = Infinity;
@@ -85,8 +86,8 @@ function a_star(start, goal) {
   fScore[start] = heuristic(start);
 
   while (openSet.size > 0) {
-    let current = Array.from(openSet).reduce((a, b) =>
-      fScore[a] < fScore[b] ? a : b
+    let current = Array.from(openSet).reduce(
+      (a, b) => (fScore[a] < fScore[b] ? a : b) // current node is chosen based on the lowest heuristic value.
     );
 
     if (current === goal) {
