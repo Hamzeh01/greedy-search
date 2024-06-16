@@ -44,7 +44,6 @@ const graph = {
   Zerind: { Arad: 75, Oradea: 71 },
 };
 
-// used to estimate the cost to reach the goal from the current node.
 const heuristics = {
   Arad: 366,
   Bucharest: 0,
@@ -68,38 +67,51 @@ const heuristics = {
   Zerind: 374,
 };
 
+/**
+ * Heuristic function to estimate the cost to reach the goal from the current node.
+ * @param {string} city - The name of the city.
+ * @returns {number} The heuristic value for the city.
+ */
 function heuristic(city) {
   return heuristics[city];
 }
 
+/**
+ * A* algorithm implementation to find the shortest path from start to goal.
+ * @param {string} start - The starting city.
+ * @param {string} goal - The goal city.
+ * @returns {Array<string>} The shortest path from start to goal.
+ */
 function a_star(start, goal) {
-  let openSet = new Set([start]); // initialized with the starting node.
-  let cameFrom = {}; // keeps track of the path.
-  let gScore = {}; // The cost of the path from the start node to the current node.
-  let fScore = {}; // The estimated total cost from the start node to the goal through the current node.
+  const openSet = new Set([start]); // Set of nodes to be evaluated
+  const cameFrom = {}; // To reconstruct the path
+  const gScore = {}; // Cost from start to the current node
+  const fScore = {}; // Estimated total cost from start to goal through the current node
 
   cities.forEach((city) => {
-    gScore[city] = Infinity;
-    fScore[city] = Infinity;
+    gScore[city] = Infinity; // Initialize gScore to infinity
+    fScore[city] = Infinity; // Initialize fScore to infinity
   });
-  gScore[start] = 0;
-  fScore[start] = heuristic(start);
+  gScore[start] = 0; // gScore of start is 0
+  fScore[start] = heuristic(start); // fScore of start is its heuristic value
 
   while (openSet.size > 0) {
-    let current = Array.from(openSet).reduce(
-      (a, b) => (fScore[a] < fScore[b] ? a : b) // current node is chosen based on the lowest heuristic value.
+    // Current node is the one with the lowest fScore
+    const current = Array.from(openSet).reduce((a, b) =>
+      fScore[a] < fScore[b] ? a : b
     );
 
     if (current === goal) {
-      return reconstruct_path(cameFrom, current);
+      return reconstructPath(cameFrom, current); // Goal reached, reconstruct path
     }
 
-    openSet.delete(current);
+    openSet.delete(current); // Remove current node from openSet
 
-    for (let neighbor in graph[current]) {
-      let tentative_gScore = gScore[current] + graph[current][neighbor];
+    for (const neighbor in graph[current]) {
+      const tentative_gScore = gScore[current] + graph[current][neighbor];
 
       if (tentative_gScore < gScore[neighbor]) {
+        // Found a better path to the neighbor
         cameFrom[neighbor] = current;
         gScore[neighbor] = tentative_gScore;
         fScore[neighbor] = gScore[neighbor] + heuristic(neighbor);
@@ -108,27 +120,34 @@ function a_star(start, goal) {
     }
   }
 
-  return [];
+  return []; // No path found
 }
 
+/**
+ * Greedy Best-First Search (GBFS) algorithm implementation to find the shortest path from start to goal.
+ * @param {string} start - The starting city.
+ * @param {string} goal - The goal city.
+ * @returns {Array<string>} The path from start to goal using GBFS.
+ */
 function gbfs(start, goal) {
-  let openSet = new Set([start]);
-  let cameFrom = {};
-  let visited = new Set();
+  const openSet = new Set([start]); // Set of nodes to be evaluated
+  const cameFrom = {}; // To reconstruct the path
+  const visited = new Set(); // Set of nodes already evaluated
 
   while (openSet.size > 0) {
-    let current = Array.from(openSet).reduce((a, b) =>
+    // Current node is the one with the lowest heuristic value
+    const current = Array.from(openSet).reduce((a, b) =>
       heuristic(a) < heuristic(b) ? a : b
     );
 
     if (current === goal) {
-      return reconstruct_path(cameFrom, current);
+      return reconstructPath(cameFrom, current); // Goal reached, reconstruct path
     }
 
-    openSet.delete(current);
-    visited.add(current);
+    openSet.delete(current); // Remove current node from openSet
+    visited.add(current); // Add current node to visited set
 
-    for (let neighbor in graph[current]) {
+    for (const neighbor in graph[current]) {
       if (!visited.has(neighbor)) {
         cameFrom[neighbor] = current;
         openSet.add(neighbor);
@@ -136,18 +155,27 @@ function gbfs(start, goal) {
     }
   }
 
-  return [];
+  return []; // No path found
 }
 
-function reconstruct_path(cameFrom, current) {
-  let total_path = [current];
+/**
+ * Reconstructs the path from start to goal using the cameFrom map.
+ * @param {Object} cameFrom - The map of navigated nodes.
+ * @param {string} current - The current node.
+ * @returns {Array<string>} The reconstructed path.
+ */
+function reconstructPath(cameFrom, current) {
+  const totalPath = [current];
   while (current in cameFrom) {
     current = cameFrom[current];
-    total_path.push(current);
+    totalPath.push(current);
   }
-  return total_path.reverse();
+  return totalPath.reverse();
 }
 
+/**
+ * Handles the pathfinding when the button is clicked.
+ */
 function findPath() {
   const startCity = document.getElementById("start-city").value;
   const algorithm = document.getElementById("algorithm").value;
@@ -162,25 +190,26 @@ function findPath() {
 
   if (path.length === 0) {
     resultDiv.innerHTML = `<p>No path found</p>`;
-    resultDiv.classList.add("visible");
-    return;
+  } else {
+    const cost = path.reduce((sum, city, index) => {
+      if (index < path.length - 1) {
+        return sum + graph[city][path[index + 1]];
+      }
+      return sum;
+    }, 0);
+
+    resultDiv.innerHTML = `
+      <h2>Best Path</h2>
+      <p>${path.join(" -> ")}</p>
+      <p>Cost: ${cost}</p>
+    `;
   }
-
-  const cost = path.reduce((sum, city, index) => {
-    if (index < path.length - 1) {
-      return sum + graph[city][path[index + 1]];
-    }
-    return sum;
-  }, 0);
-
-  resultDiv.innerHTML = `
-        <h2>Best Path</h2>
-        <p>${path.join(" -> ")}</p>
-        <p>Cost: ${cost}</p>
-      `;
   resultDiv.classList.add("visible");
 }
 
+/**
+ * Event listener for the theme switch.
+ */
 document
   .getElementById("theme-switch")
   .addEventListener("change", function (event) {
